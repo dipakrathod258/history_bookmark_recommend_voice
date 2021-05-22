@@ -13,6 +13,8 @@ import json
 import datetime
 from gtts import gTTS
 import os
+from googlesearch import search
+
 
 class SignUpView(generic.CreateView):
     form_class = UserCreationForm
@@ -39,6 +41,11 @@ class ProductHistoryView(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'product_history.html'
 
+class ThankYouBookmarkView(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'thank_you_bookmark.html'
+
 def combine_features(row):
     try:
         return row["keywords"]+" "+row["cast"]+" "+row["genres"]+" "+row["director"]
@@ -58,57 +65,74 @@ def get_index_from_title(movie_title, df):
 
 def create_post(request):
     # print(request.POST['movie_name'])
-    # HttpResponse()
-    df = pd.read_csv('/home/rahul/workspace/History/history_recommendation/assets/movie_dataset.csv')
-    #Select  features
+    try:
+        # HttpResponse()
+        df = pd.read_csv('/home/rahul/Desktop/movie_dataset.csv')
+        #Select  features
 
-    features = ["keywords", 'cast', "genres", "director"]
+        features = ["keywords", 'cast', "genres", "director"]
 
-    for feature in features:
-        df[feature] = df[feature].fillna('')
+        for feature in features:
+            df[feature] = df[feature].fillna('')
 
-    #Create a colummn in DataFrame & combine features
+        #Create a colummn in DataFrame & combine features
 
-    df["combined_features"] = df.apply(combine_features, axis=1)
+        df["combined_features"] = df.apply(combine_features, axis=1)
 
-    #Create count matrix using combined features
+        #Create count matrix using combined features
 
-    cv = CountVectorizer()
-    count_matrix = cv.fit_transform(df["combined_features"])
-    cosine_sim = cosine_similarity(count_matrix)
-    cosine_sim.shape
+        cv = CountVectorizer()
+        count_matrix = cv.fit_transform(df["combined_features"])
+        cosine_sim = cosine_similarity(count_matrix)
+        cosine_sim.shape
 
-    movie_user_likes = request.POST['movie_name']
+        movie_user_likes = request.POST['movie_name']
 
-    #get index of the movie from its title
-    movie_index = get_index_from_title(movie_user_likes, df)
-    movie_index
-    print("movie_index")
-    print(movie_index)
+        #get index of the movie from its title
+        movie_index = get_index_from_title(movie_user_likes, df)
+        movie_index
+        print("movie_index")
+        print(movie_index)
 
-    similar_movies = list(enumerate(cosine_sim[movie_index][0]))
-    # for movie in similar_movies:
-    #     print(movie[1])
+        similar_movies = list(enumerate(cosine_sim[movie_index][0]))
+        # for movie in similar_movies:
+        #     print(movie[1])
 
 
-    #Get list of movies in descending order of similarity
-    sorted_similar_movies = sorted(similar_movies, key = lambda x: x[1], reverse =True)
-    sorted_similar_movies
+        #Get list of movies in descending order of similarity
+        sorted_similar_movies = sorted(similar_movies, key = lambda x: x[1], reverse =True)
+        sorted_similar_movies
 
-    #Get list of first 50 similar movies
-    i=0
-    results = list()
-    for movie in sorted_similar_movies:
-        print(get_title_from_index(movie[0], df))
-        
-        results.append(get_title_from_index(movie[0], df))
-        i+=1
-        if(i>15):
-            break
-    print('result')
-    print(results)
+        #Get list of first 50 similar movies
+        i=0
+        results = list()
+        for movie in sorted_similar_movies:
+            # print(get_title_from_index(movie[0], df))
+            
+            results.append(get_title_from_index(movie[0], df))
+            i+=1
+            if(i>15):
+                break
+        # to search
+        results = set(results)
 
-    return render(request, 'results.html', {'results': results})
+        return render(request, 'results.html', {'results': results})
+    except Exception as e:
+        errorObj = True
+        results = False
+
+        query = request.POST['movie_name']
+        net_results = []
+        for j in search(query, tld="co.in", num=10, stop=10, pause=2):
+            net_results.append(j)
+        print("net_results")
+        print(net_results)
+        return render(request, 'results.html', {'errorObj': net_results})
+    else:
+        pass
+    finally:
+        pass
+
 
 def textToSpeech(request):
     mytext = 'Welcome to geeksforgeeks!'

@@ -3,47 +3,72 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<!-- <style type="text/css">
+
+{% if errorObj %}
+
+<style type="text/css">
 	.footer {
 		position: absolute;
 		bottom: 0;
 		width: 100%;
 	}
 </style>
- -->
+{% endif %}
+
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-offset-3 col-sm-6">
 			<h3>History & Bookmark Recommendations</h3>
-			<div class="alert alert-success">
-				<strong>Success!</strong>We have following recommendations for you based on your past history & bookmarks combined.
-			</div>
-			<ul>
+			{% if results %}
+				<div class="alert alert-success">
+					<strong>Success!</strong> We have following recommendations for you based on your past history & bookmarks combined.
+				</div>
+				<ul>
 			    {% for result in results %}
 
 					<li>{{ result }}</li>
 			     {% endfor %}
-			</ul>
-			<a href="{% url 'textToSpeech' %}" class="btn btn-primary">Text to Speech</a>
+				</ul>
+ 				<a href="{% url 'textToSpeech' %}" class="btn btn-primary">Text to Speech</a>
+
+			{% endif %}
+
+			{% if errorObj %}
+			<div class="alert alert-warning">
+				<strong>Hey!</strong> Your Search has following recommendations.
+			</div>
+			<h4>Your recommendations:</h4>
+				<ul>
+			    {% for result in errorObj %}
+
+					<li><a href="{{ result }}">{{ result }}</a></li>
+			     {% endfor %}
+				</ul>
+
+			{% endif %}
 		</div>
 	</div>
+	{% if results %}
+
 	<div class="row">
 		<div class="col-sm-offset-3 col-sm-6">
 			<h4>Bookmark above Results:</h4>
 			<hr>
-			<form action="/thank_you_bookmark">
+			<form action="{% url 'thank_you_bookmark' %}">
 			  <div class="checkbox">
 			    <span><i class="fa fa-bookmark"></i></span>
 			    <label><input type="checkbox"> Do you want to bookmark these results?</label>
 			  </div>
 			  <div class="form-group">
 			    <label for="pwd">Remarks(optional):</label>
-			    <input type="password" class="form-control" id="pwd">
+			    <!-- <input type="text" class="form-control" id="pwd"> -->
+			    <textarea class="form-control"></textarea>
 			  </div>
 			  <button type="submit" class="btn btn-warning">Submit</button>
 			</form>	
 		</div>
 	</div>
+	{% endif %}
 	<br>
 	<br>
 </div>
