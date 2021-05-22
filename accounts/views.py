@@ -14,6 +14,7 @@ import datetime
 from gtts import gTTS
 import os
 from googlesearch import search
+from playsound import playsound
 
 
 class SignUpView(generic.CreateView):
@@ -115,13 +116,32 @@ def create_post(request):
                 break
         # to search
         results = set(results)
+        for x in results:        
+            language = 'en'
+            myobj = gTTS(text=x, lang=language, slow=False)
+            print("title")
+            print(x)
+            file_name = x+".mp3"
+            print(file_name)
+            myobj.save(file_name)
+            os.system("mpg321 file_name")
+            playsound(file_name)
 
         return render(request, 'results.html', {'results': results})
     except Exception as e:
         errorObj = True
         results = False
-
+        print("error")
+        print(e)
         query = request.POST['movie_name']
+        textSample = "Hey! Your Search has the recommendations as per below link."+query
+        language = 'en'
+        myobj = gTTS(text=textSample, lang=language, slow=False)
+        myobj.save("recommendations.mp3")
+        os.system("mpg321 recommendations.mp3")
+        playsound("recommendations.mp3")
+
+
         net_results = []
         for j in search(query, tld="co.in", num=10, stop=10, pause=2):
             net_results.append(j)
@@ -140,3 +160,4 @@ def textToSpeech(request):
     myobj = gTTS(text=mytext, lang=language, slow=False)
     myobj.save("welcome.mp3")
     os.system("mpg321 welcome.mp3")
+
