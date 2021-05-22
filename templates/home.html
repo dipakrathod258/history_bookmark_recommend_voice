@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<style type="text/css">
+	.footer {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+	}
+</style>
+
+<div class="container">
+	<div class="row">
+		<!-- <a href="/" class="btn btn-primary">Go Back</a> -->
+	</div>
+	<div class="row">
+		<h3>History & Bookmark Engine:</h3>
+		<hr>
+		<div class="col-sm-offset-3 col-sm-6">
+			<form id="movie_form" method="POST" class="form-inline" action="{% url 'create_post' %}">
+			{% csrf_token %}
+			  <div class="form-group">
+			    <label for="movie_name">Enter a Keyword here:</label>
+			    <input type="text" class="form-control" name="movie_name" id="movie_name">
+			  </div>
+			  <br>
+			  <br>
+			  <button type="submit" class="btn btn-success">Search</button>
+			  <br>
+			  <br>
+			<span><strong>Note:</strong><i>This engine works on the basis of Machine Learning Algorithm & what are user actions in the past</i></span>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% else %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+  			Click here for login >>> <a href="{% url 'login' %}" class="btn btn-warning">Log In</a>
+			
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<h3>Welcome to History & Book Recommendation Engine!!</h3>
+			<div id="myCarousel" class="carousel slide" data-ride="carousel">
+			  <!-- Indicators -->
+			  <ol class="carousel-indicators">
+			    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			    <li data-target="#myCarousel" data-slide-to="1"></li>
+			    <li data-target="#myCarousel" data-slide-to="2"></li>
+			  </ol>
+
+			  <!-- Wrapper for slides -->
+			  <div class="carousel-inner">
+			    <div class="item active">
+			      <img src="https://miro.medium.com/max/5000/1*1QaXyDuCvMmcZKT--EnuTA.jpeg" alt="Los Angeles">
+			    </div>
+
+			    <div class="item">
+			      <img src="https://miro.medium.com/max/5000/1*Q-IKuMJLaygLdUq2Bh9dfA.jpeg" alt="Chicago">
+			    </div>
+
+			    <div class="item">
+			      <img src="https://www.duarte.com/wp-content/uploads/02-Blog-Post_102319.jpg" alt="New York">
+			    </div>
+			  </div>
+
+			  <!-- Left and right controls -->
+			  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+			    <span class="glyphicon glyphicon-chevron-left"></span>
+			    <span class="sr-only">Previous</span>
+			  </a>
+			  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+			    <span class="glyphicon glyphicon-chevron-right"></span>
+			    <span class="sr-only">Next</span>
+			  </a>
+			</div>
+			<hr>
+<!-- 			<p>A recommender system, or a recommendation system (sometimes replacing 'system' with a synonym such as platform or engine), is a subclass of information filtering system that seeks to predict the "rating" or "preference" a user would give to an item.</p>
+ -->			<p>Our product is very soothing in terms of search engine processing. It uses advanced machine learning techniques & algorithms on the go.</p>
+			<h4>Our Features:</h4>
+			<ul>
+				<li>Search Engine: It is open to search anything</li>
+				<li>History: We keep track of your history to recommend your interests later</li>
+				<li>Bookmarks: We keep track of your Bookmarks to recommend your interests later</li>
+				<li>Text to Voice: You get your search results through text & voice</li>
+			</ul>
+
+			<p>We are a startup company of 3 shareholders & about to land up in the market. We have lots of ideas in our mind that we are constantly working on to make our product best for our users.</p>
+		</div>
+	</div>
+</div>
+
+{% endif %}
+{% endblock %}

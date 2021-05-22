@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- <style type="text/css">
+	.footer {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+	}
+</style>
+ -->
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-offset-3 col-sm-6">
+			<h3>History & Bookmark Recommendations</h3>
+			<div class="alert alert-success">
+				<strong>Success!</strong>We have following recommendations for you based on your past history & bookmarks combined.
+			</div>
+			<ul>
+			    {% for result in results %}
+
+					<li>{{ result }}</li>
+			     {% endfor %}
+			</ul>
+			<a href="{% url 'textToSpeech' %}" class="btn btn-primary">Text to Speech</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-offset-3 col-sm-6">
+			<h4>Bookmark above Results:</h4>
+			<hr>
+			<form action="/thank_you_bookmark">
+			  <div class="checkbox">
+			    <span><i class="fa fa-bookmark"></i></span>
+			    <label><input type="checkbox"> Do you want to bookmark these results?</label>
+			  </div>
+			  <div class="form-group">
+			    <label for="pwd">Remarks(optional):</label>
+			    <input type="password" class="form-control" id="pwd">
+			  </div>
+			  <button type="submit" class="btn btn-warning">Submit</button>
+			</form>	
+		</div>
+	</div>
+	<br>
+	<br>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,22 @@
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">History & Bookmark recommendation</a>
+    </div>
+    <ul class="nav navbar-nav pull-right">
+      <li class="active"><a href="/">Home</a></li>
+      <li><a href="{% url 'product_history' %}">Product history</a></li>
+      <li><a href="{% url 'about_us' %}"><i class="fa fa-user-circle"></i>&nbsp;About Us</a></li>
+      <li><a href="{% url 'contact_us' %}"><i class="fa fa-mobile"></i>&nbsp;Contact Us</a></li>
+      {% if user.is_authenticated %}
+        <li><a href="#">{{ user.username }}!</a></li>
+        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>&nbsp;Log Out</a></li>
+        <!-- <p><a href="{% url 'password_reset' %}">Reset Password</a></p> -->
+      {% else %}
+        <!-- <p>You are not logged in</p> -->
+        <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>&nbsp;Log In</a></li>
+      {% endif %}
+
+    </ul>
+  </div>
+</nav>
