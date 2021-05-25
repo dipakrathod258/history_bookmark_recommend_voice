@@ -17,4 +17,5 @@ urlpatterns = [
     path('thank_you_bookmark/', ThankYouBookmarkView.as_view(), name='thank_you_bookmark'),
     path('create_post', views.create_post, name='create_post'),
     path('textToSpeech', views.textToSpeech, name='textToSpeech'),
+    path('save_contact', views.saveContact, name='save_contact'),
 ]

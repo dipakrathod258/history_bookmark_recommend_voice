@@ -71,7 +71,8 @@ input[type=submit]:hover {
       <img src="https://www.w3schools.com/w3images/map.jpg" style="width:100%">
     </div>
     <div class="column">
-      <form action="{% url 'thank_you' %}">
+      <form action="/accounts/save_contact" method="POST">
+        {% csrf_token %}
         <label for="fname">First Name</label>
         <input type="text" id="fname" name="firstname" placeholder="Your name..">
         <label for="lname">Last Name</label>

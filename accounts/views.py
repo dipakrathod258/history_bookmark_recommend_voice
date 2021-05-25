@@ -19,6 +19,7 @@ from gtts import gTTS
 from googlesearch import search
 from playsound import playsound
 
+from .models import Contact
 
 class SignUpView(generic.CreateView):
     form_class = UserCreationForm
@@ -164,3 +165,11 @@ def textToSpeech(request):
     myobj.save("welcome.mp3")
     os.system("mpg321 welcome.mp3")
 
+def saveContact(request):
+    contact = Contact()
+    contact.firstName = request.POST.get("firstname")
+    contact.lastName = request.POST.get("lastname")
+    contact.countryName = request.POST.get("country")
+    contact.subject = request.POST.get("subject")
+    contact.save()
+    return render(request, 'contact_success.html')
