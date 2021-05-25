@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 
 # Machine Learning packages
+
 import pandas as pd
 import numpy as numpy
 from sklearn.feature_extraction.text import CountVectorizer
@@ -17,16 +18,21 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 from sklearn.metrics.pairwise import cosine_similarity
 
+
 # Python packages
+
 import json
 import datetime
 import os
 
+
 # Third part packages
+
 from gtts import gTTS
 from googlesearch import search
 from playsound import playsound
 
+from .models import Contact
 
 class SignUpView(generic.CreateView):
     form_class = UserCreationForm
@@ -180,3 +186,11 @@ def textToSpeech(request):
     myobj.save("welcome.mp3")
     os.system("mpg321 welcome.mp3")
 
+def saveContact(request):
+    contact = Contact()
+    contact.firstName = request.POST.get("firstname")
+    contact.lastName = request.POST.get("lastname")
+    contact.countryName = request.POST.get("country")
+    contact.subject = request.POST.get("subject")
+    contact.save()
+    return render(request, 'contact_success.html')
