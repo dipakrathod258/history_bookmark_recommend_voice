@@ -1,19 +1,32 @@
+# Django packages
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
-
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 
+# Machine Learning packages
+
 import pandas as pd
 import numpy as numpy
 from sklearn.feature_extraction.text import CountVectorizer
+#sklearn : Scikit learn (Science kit learn) used for fetching the ML model
+#CountVectorizer: We want to convert text into matrix/vector
+#CountVectorizer: Matrix/vector is the only format understood by ML model
+# Options: word2vec, bert etc.(Deep learning) -> 1 Billion
+
 from sklearn.metrics.pairwise import cosine_similarity
+
+
+# Python packages
 
 import json
 import datetime
 import os
+
+
+# Third part packages
 
 from gtts import gTTS
 from googlesearch import search
@@ -72,24 +85,27 @@ def create_post(request):
     # print(request.POST['movie_name'])
     try:
         # HttpResponse()
-        df = pd.read_csv('/home/rahul/Desktop/movie_dataset.csv')
+        df = pd.read_csv('C:/Users/Akhil/Downloads/movie_dataset.csv')
+        #pd = pandas datframe
+        #df = DataFrame
+        # Dataframe is used for converting the text csv into object
         #Select  features
 
-        features = ["keywords", 'cast', "genres", "director"]
-
+        features = ["keywords", 'cast', "genres", "director"] # cold call
+        # Feature selection im machine learning
         for feature in features:
             df[feature] = df[feature].fillna('')
 
         #Create a colummn in DataFrame & combine features
 
-        df["combined_features"] = df.apply(combine_features, axis=1)
+        df["combined_features"] = df.apply(combine_features, axis=1) # Truth values
 
         #Create count matrix using combined features
 
         cv = CountVectorizer()
-        count_matrix = cv.fit_transform(df["combined_features"])
-        cosine_sim = cosine_similarity(count_matrix)
-        cosine_sim.shape
+        count_matrix = cv.fit_transform(df["combined_features"]) # Training of the model
+        cosine_sim = cosine_similarity(count_matrix) # validation or predictions or testing
+        cosine_sim.shape # rows and  columns in matrix
 
         movie_user_likes = request.POST['movie_name']
 
@@ -99,13 +115,14 @@ def create_post(request):
         print("movie_index")
         print(movie_index)
 
-        similar_movies = list(enumerate(cosine_sim[movie_index][0]))
+        similar_movies = list(enumerate(cosine_sim[movie_index][0])) # Return the list of records 
+        # which mathces with the data set titles after model prediction
         # for movie in similar_movies:
         #     print(movie[1])
 
 
         #Get list of movies in descending order of similarity
-        sorted_similar_movies = sorted(similar_movies, key = lambda x: x[1], reverse =True)
+        sorted_similar_movies = sorted(similar_movies, key = lambda x: x[1], reverse =True) # Anonymous function to sort the records in descending order 
         sorted_similar_movies
 
         #Get list of first 50 similar movies
@@ -128,8 +145,10 @@ def create_post(request):
             file_name = x+".mp3"
             print(file_name)
             myobj.save(file_name)
+            # os.chmod(file_name, stat.S_IRUSR)
             os.system("mpg321 file_name")
             playsound(file_name)
+            os.remove(file_name)
 
         return render(request, 'results.html', {'results': results})
     except Exception as e:
@@ -144,6 +163,7 @@ def create_post(request):
         myobj.save("recommendations.mp3")
         os.system("mpg321 recommendations.mp3")
         playsound("recommendations.mp3")
+        os.remove('recommendations.mp3')
 
 
         net_results = []
@@ -151,7 +171,8 @@ def create_post(request):
             net_results.append(j)
         print("net_results")
         print(net_results)
-        return render(request, 'results.html', {'errorObj': net_results})
+        return render(request, 'results.html', {'errorObj': net_results}) # We are passing these net results so that
+        # we will have a track of all the global searches
     else:
         pass
     finally:
