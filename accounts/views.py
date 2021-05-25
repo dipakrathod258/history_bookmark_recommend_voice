@@ -5,14 +5,17 @@ from django.views import generic
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
+
 import pandas as pd
 import numpy as numpy
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+
 import json
 import datetime
-from gtts import gTTS
 import os
+
+from gtts import gTTS
 from googlesearch import search
 from playsound import playsound
 

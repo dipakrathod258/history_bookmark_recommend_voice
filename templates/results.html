@@ -6,14 +6,14 @@
 
 {% if errorObj %}
 
-<style type="text/css">
+<!-- <style type="text/css">
 	.footer {
 		position: absolute;
 		bottom: 0;
 		width: 100%;
 	}
 </style>
-{% endif %}
+ -->{% endif %}
 
 <div class="container-fluid">
 	<div class="row">
@@ -48,7 +48,27 @@
 			{% endif %}
 		</div>
 	</div>
-	{% if results %}
+<!-- 	{% if results %}
+
+	<div class="row">
+		<div class="col-sm-offset-3 col-sm-6">
+			<h4>Bookmark above Results:</h4>
+			<hr>
+			<form action="{% url 'thank_you_bookmark' %}">
+			  <div class="checkbox">
+			    <span><i class="fa fa-bookmark"></i></span>
+			    <label><input type="checkbox"> Do you want to bookmark these results?</label>
+			  </div>
+			  <div class="form-group">
+			    <label for="pwd">Remarks(optional):</label>
+			    <textarea class="form-control"></textarea>
+			  </div>
+			  <button type="submit" class="btn btn-warning">Submit</button>
+			</form>	
+		</div>
+	</div>
+	{% endif %}
+ -->	
 
 	<div class="row">
 		<div class="col-sm-offset-3 col-sm-6">
@@ -68,8 +88,8 @@
 			</form>	
 		</div>
 	</div>
-	{% endif %}
-	<br>
+
+ <br>
 	<br>
 </div>
 
